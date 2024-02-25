@@ -27,7 +27,7 @@ const displayPhones = (phones, isShowAll) => {
         const phoneCard = document.createElement('div');
         phoneCard.classList = `card bg-base-100 p-4 shadow-xl`;
         // 3. set innerHTML
-        phoneCard.innerHTML =   `
+        phoneCard.innerHTML = `
         <figure class="px-10 pt-10">
             <img src="${phone.image}" alt="" class="rounded-xl" />
         </figure>
@@ -51,8 +51,27 @@ const handleShowDetails = async(id) => {
     // load individual data
     const res = await fetch(`https://openapi.programming-hero.com/api/phone/${id}`);
     const data = await res.json();
+    const phone = data.data;
+    showPhoneDetails(phone);
 }
 
+const showPhoneDetails = (phone) => {
+    const phoneName = document.getElementById('show-detail-phone-name');
+    phoneName.innerText = phone.name;
+    const showDetailContainer = document.getElementById('show-detail-container');
+    showDetailContainer.classList = 'card card-side bg-base-100 shadow-xl';
+    showDetailContainer.innerHTML = `
+        <figure>
+            <img src="${phone.image}" alt="">
+        </figure>
+        <div class="card-body">
+            <h2 class="card-title">Storage: ${phone?.mainFeatures?.storage}</h2>
+            <p>GPS: ${phone?.others?.GPS || 'No GPS'}</p>
+        </div>
+    `;
+    // display the modal
+    showDetailsModal.showModal();
+}
 
 const handleSearch = (isShowAll) => {
     toggleLoadingSpinner(true);
